@@ -1,0 +1,30 @@
+This project was amended by BRISSKit in order to facilitate the processing of an appointments' list passed across 
+as an excel spreadsheet. 
+
+Jira issue ONYX-1682 was raised with Obiba as a result of this problem
+
+Modules changed:
+org.obiba.onyx.core.etl.participant.impl.AbstractParticipantReader
+org.obiba.onyx.core.etl.participant.impl.DeleteUnreceivedParticipantsTasklet
+org.obiba.onyx.core.etl.participant.impl.AppointmentListUpdateListener
+
+This was the description of the problem as passed to Obiba...
+
+I want to drop an Excel spreadsheet (ie: an appointments' list) into Onyx more frequently than once a day. 
+I want to do this via another system using a web service. I've designed the web service which correctly 
+formats a spreadsheet and drops it in the configured WEBINF/appointments/in directory. 
+I've configured Onyx to run the appointment lists' cron job every so often (say once an hour) instead 
+of at 4am as the default currently is with the onyx-demo system. 
+
+By the way, I'm using the onyx-demo war file, so it is version v1.8.1-b11948.
+
+Everything works fine for the first cron invocation after starting Tomcat, with the job finishing 
+with a status of [COMPLETED]. That's really good! But the second and subsequent invocations fail 
+to pick up any new spreadsheet dropped into the WEBINF/appointments/in directory; 
+the logs show that the failing job finishes with a status of [UNKNOWN]. 
+However, if I then restart Tomcat, the first cron job after restarting picks up the new spreadsheet 
+and processes it correctly, but subsequent cron jobs still fail to pick up any further new spreadsheets. 
+So it requires me to force a restart of Tomcat in order to pick up a new spreadsheet!   :-(
+
+On a failure, I have tried to trigger the process manually as administrator within the Onyx webapp gui, 
+but get the message "No appointment list update file available".
